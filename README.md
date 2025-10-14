@@ -1,6 +1,10 @@
 # The-game-of-life
 TP final en python - Jeu de la Vie de Conway
 
+## ⚠️ Structure du projet
+**IMPORTANT :** Tous les fichiers Python sont dans le dossier `grid_generation/`  
+**Ne pas créer de fichiers .py dans le dossier racine !**
+
 ## 📋 Contexte du TP
 
 Le jeu de la Vie de Conway est un « jeu à zéro joueur ». Le jeu se déroule sur une grille n×n où chaque cellule est soit vivante (1), soit morte (0) et possède 8 voisines.
