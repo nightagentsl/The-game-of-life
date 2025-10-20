@@ -1,13 +1,25 @@
-from game import Universe, demander_taille, get_key
+from game import Universe, demander_taille, get_key, save_grid, charge_last_grid
 import sys
 import time
 import os
 
 if __name__ == "__main__":
     while True:
-        width, height = demander_taille()
-        universe = Universe(width, height)
-        generation = 0
+        print("=== 🌌 Jeu de la Vie ===")
+        choix = input("Souhaitez-vous charger la dernière sauvegarde ? (o/n) : ").lower()
+
+        if choix == "o":
+            universe, generation = charge_last_grid()
+            if universe is None:
+                width, height = demander_taille()
+                universe = Universe(width, height)
+                generation = 0
+        else:
+            width, height = demander_taille()
+            universe = Universe(width, height)
+            generation = 0
+
+        
         paused = False
 
         while True:
