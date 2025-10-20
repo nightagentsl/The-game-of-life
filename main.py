@@ -42,6 +42,7 @@ if __name__ == "__main__":
                             paused = False  # resume
                         elif key == "n":
                             os.system("cls" if os.name == "nt" else "clear")
+                            save_grid(universe, generation)
                             break  # new game
                         elif key == "q":
                             print("End of the program, see you soon young padawan.")
@@ -50,12 +51,14 @@ if __name__ == "__main__":
                         time.sleep(0.1)
 
                     if key == "n":  # if user wants a new game
+                        save_grid(universe, generation)
                         break
 
                 else:
                     paused = False  # if in pause, continue the game
 
             elif key == "n":
+                save_grid(universe, generation)
                 break  
             elif key == "q":
                 save_grid(universe, generation)
