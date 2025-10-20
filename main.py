@@ -58,6 +58,7 @@ if __name__ == "__main__":
             elif key == "n":
                 break  
             elif key == "q":
+                save_grid(universe, generation)
                 print("End of the program, see you soon young padawan.")
                 sys.exit()
 
