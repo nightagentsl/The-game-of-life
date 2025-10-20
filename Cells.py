@@ -1,31 +1,65 @@
 import random
 import os
+import time
+import sys
+
+if os.name == "nt":  # La c'est pour Windows
+    import msvcrt
+
+    def get_key():
+        # Retourne une touche pressée ou None s'il n'y en a pas #
+        if msvcrt.kbhit():
+            return msvcrt.getch().decode("utf-8").lower()
+        return None
+else:  # C'est pas analysé sur window et c'est normal parce que c'est pour Linux.
+    import sys, termios, tty, select
+
+    def get_key():
+        # Retourne quand une touche est pressée #
+        dr, _, _ = select.select([sys.stdin], [], [], 0)
+        if dr:
+            return sys.stdin.read(1).lower()
+        return None
 
 class Cell:
     def __init__(self, alive=False):
         self.alive = alive
 
     def __repr__(self):
-        return "💭​​" if self.alive else "💀​"
+        return "​◘" if self.alive else "♦"
 
 class Universe:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        # Création d'une grille de cellules aléatoires
-        self.grid = [[Cell(random.choice([True, False])) for _ in range(width)] for _ in range(height)]
+        self.generate_random_grid()
 
-    def display(self):
-        os.system("cls" if os.name == "nt" else "clear")  # nettoie le terminal
+    def generate_random_grid(self):
+        # Crée une grille aléatoire de cellules vivantes/mortes #
+        self.grid = [
+            [Cell(random.choice([True, False])) for _ in range(self.width)]
+            for _ in range(self.height)
+        ]
+
+    def display(self, generation, pause=False):
+        # Affiche la grille dans la console #
+        os.system("cls" if os.name == "nt" else "clear") # Ça nettoie la console
+        print(f"Génération : {generation}\n")
         for row in self.grid:
             print(" ".join(str(cell) for cell in row))
         print()
+        if pause:
+            print("⏸ Jeu en pause — appuyez sur [ESPACE] pour reprendre, [n] pour nouvelle grille, [q] pour quitter.")
+        else:
+            print("(Appuyez sur [ESPACE] pour mettre en pause)")
 
     def count_neighbors(self, x, y):
-        """Compte les cellules vivantes autour d'une cellule donnée"""
-        directions = [(-1,-1), (-1,0), (-1,1),
-                      (0,-1),          (0,1),
-                      (1,-1), (1,0), (1,1)]
+        """Compte le nombre de voisins vivants autour d’une cellule"""
+        directions = [
+            (-1, -1), (-1, 0), (-1, 1),
+            (0, -1),           (0, 1),
+            (1, -1), (1, 0), (1, 1),
+        ]
         count = 0
         for dx, dy in directions:
             nx, ny = x + dx, y + dy
@@ -35,28 +69,20 @@ class Universe:
         return count
 
     def next_generation(self):
-        """Crée la génération suivante selon les règles de Conway"""
+        """Applique les règles du jeu de la vie pour passer à la génération suivante"""
         new_grid = [[Cell() for _ in range(self.width)] for _ in range(self.height)]
-
         for x in range(self.height):
             for y in range(self.width):
                 alive = self.grid[x][y].alive
                 neighbors = self.count_neighbors(x, y)
-
-                # Règles de Conway
                 if alive and neighbors in (2, 3):
                     new_grid[x][y].alive = True
                 elif not alive and neighbors == 3:
                     new_grid[x][y].alive = True
-                else:
-                    new_grid[x][y].alive = False
-
         self.grid = new_grid
-        
-        
-def askSize():
-    # Demande la taille de la grille à l'utilisateur #
-    
+
+def demander_taille():
+    """Demande la taille de la grille à l'utilisateur"""
     while True:
         try:
             width = int(input("Entrez la largeur de la grille : "))
@@ -66,31 +92,29 @@ def askSize():
             print("⚠️ Veuillez entrer des nombres entiers valides.\n")
 
 
-# Programme principal #
+# --- Programme principal ---
 if __name__ == "__main__":
-    while True:
-        width, height = askSize()
+    while True:  # boucle générale 
+        width, height = demander_taille()
         universe = Universe(width, height)
         generation = 0
+        paused = False
 
-        while True:
-            universe.display()
-            print(f"Génération : {generation}")
-            print("\nOptions :")
-            print("1 - Génération suivante")
-            print("2 - Nouvelle grille")
-            print("3 - Quitter")
+        while True:  
+            universe.display(generation, paused)
 
-            choix = input("\nVotre choix : ")
+            key = get_key()
+            if key == " ":
+                paused = not paused
+            elif key == "n":
+                break  
+            elif key == "q":
+                print("👋 Fin du programme.")
+                sys.exit()
 
-            if choix == "1":
-                universe.next_generation()
+            if not paused:
+                time.sleep(0.7)
                 generation += 1
-            elif choix == "2":
-                break
-            elif choix == "3":
-                print("Au revoir 👋")
-                exit()
+                universe.next_generation()
             else:
-                print("Choix invalide. Veuillez entrer 1, 2 ou 3.")
-                input("Appuyez sur Entrée pour continuer...")
+                time.sleep(100)
