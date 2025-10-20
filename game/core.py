@@ -3,7 +3,7 @@ import os
 import sys
 import json
 
-# --- Détection du système pour la gestion des touches ---
+# Detect key imputs
 if os.name == "nt":  # Windows
     import msvcrt
 
@@ -51,7 +51,7 @@ class Universe:
         if pause:
             print()
         else:
-            print("(Appuyez sur [Entrée] pour mettre en pause)")
+            print("Press [ENTER] to pause, [n] for new game, [q] to quit.")
 
     def count_neighbors(self, x, y):
         directions = [
@@ -67,7 +67,7 @@ class Universe:
                     count += 1
         return count
 
-    # Règle du jeu de la vie pour la génération suivante #
+    # Conway game of life rule for the next generation #
     def next_generation(self):
         new_grid = [[Cell() for _ in range(self.width)] for _ in range(self.height)]
         for x in range(self.height):
@@ -81,23 +81,23 @@ class Universe:
         self.grid = new_grid
 
 
-# --- Fonction demander_taille ---
-def demander_taille():
+# ask heght and width from user #
+def ask_dimension():
     while True:
         try:
-            width = int(input("Entrez la largeur de la grille (max 70) : "))
-            height = int(input("Entrez la hauteur de la grille (max 70) : "))
+            width = int(input("Enter the henght of the grid (max 70) : "))
+            height = int(input("enter the width of the grid (max 70) : "))
             
             if 1 <= width <= 70 and 1 <= height <= 70:
                 return width, height
             else:
-                print("⚠️  Les dimensions doivent être comprises entre 1 et 100.\n")
+                print("⚠️  Dimension need to be between 1 et 100.\n")
 
         except ValueError:
-            print("❌ Veuillez entrer un nombre entier valide.\n")
+            print("❌ Please enter a valid number.\n")
             
 def save_grid(universe, generation):
-    # Sauvegarde la grille actuelle dans un fichier JSON. #
+    # Save the current generation in an JSON file. #
     data = {
         "generation": generation,
         "width": universe.width,
@@ -106,10 +106,10 @@ def save_grid(universe, generation):
     }
     with open("save.txt", "w") as f:
         json.dump(data, f)
-    print("Grille sauvegardée avec succès !")
+    print("Grid saved successfully !")
 
 def charge_last_grid():
-    # Charge la grille depuis un fichier de sauvegarde #
+    # Charge the last game grid #
     try:
         with open("save.txt", "r") as f:
             data = json.load(f)
@@ -118,8 +118,8 @@ def charge_last_grid():
         for x in range(u.height):
             for y in range(u.width):
                 u.grid[x][y].alive = data["grid"][x][y]
-        print("Sauvegarde chargée avec succès !\n")
+        print("Save charge successfully !\n")
         return u, data["generation"]
     except FileNotFoundError:
-        print("Aucune sauvegarde trouvée.\n")
+        print("No save was found.\n")
         return None, 0            

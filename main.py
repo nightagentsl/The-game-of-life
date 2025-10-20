@@ -1,21 +1,21 @@
-from game import Universe, demander_taille, get_key, save_grid, charge_last_grid
+from game import Universe, ask_dimension, get_key, save_grid, charge_last_grid
 import sys
 import time
 import os
 
 if __name__ == "__main__":
     while True:
-        print(" Jeu de la Vie de Conway le goat ")
-        choix = input("Souhaitez-vous charger la dernière sauvegarde ? (o/n) : ").lower()
+        print(" Conways Game of life")
+        choix = input("Do you want to load last save ? (o/n) : ").lower()
 
         if choix == "o":
             universe, generation = charge_last_grid()
             if universe is None:
-                width, height = demander_taille()
+                width, height = ask_dimension()
                 universe = Universe(width, height)
                 generation = 0
         else:
-            width, height = demander_taille()
+            width, height = ask_dimension()
             universe = Universe(width, height)
             generation = 0
 
@@ -26,8 +26,8 @@ if __name__ == "__main__":
             universe.display(generation, paused)
             key = get_key()
 
-            # --- GESTION DES TOUCHES ---
-            if key in ["\r", "\n"]:  # Entrée -> pause / reprise
+            # key Imputs
+            if key in ["\r", "\n"]:  # enter → pause or resume
                 if not paused:
                     paused = True
                     print("\n⏸ Jeu en pause.")
@@ -35,33 +35,33 @@ if __name__ == "__main__":
                     print("👉 Appuyez sur [n] pour une nouvelle partie.")
                     print("👉 Appuyez sur [q] pour quitter.\n")
 
-                    # Boucle d’attente pendant la pause
+                    # loop waiting in pause
                     while paused:
                         key = get_key()
                         if key in ["\r", "\n"]:
-                            paused = False  # reprendre
+                            paused = False  # resume
                         elif key == "n":
                             os.system("cls" if os.name == "nt" else "clear")
-                            break  # nouvelle partie
+                            break  # new game
                         elif key == "q":
-                            print("Fin du programme, à bientôt jeune padawan.")
+                            print("End of the program, see you soon young padawan.")
                             save_grid(universe, generation)
                             sys.exit()
                         time.sleep(0.1)
 
-                    if key == "n":  # si l'utilisateur veut une nouvelle partie
+                    if key == "n":  # if user wants a new game
                         break
 
                 else:
-                    paused = False  # si déjà en pause, on reprend directement
+                    paused = False  # if in pause, continue the game
 
             elif key == "n":
                 break  
             elif key == "q":
-                print("Fin du programme, à bientôt jeune padawan.")
+                print("End of the program, see you soon young padawan.")
                 sys.exit()
 
-            # --- AVANCE NORMAL DU JEU ---
+            # game logic
             if not paused:
                 time.sleep(1)
                 generation += 1
