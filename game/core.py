@@ -1,7 +1,7 @@
 import random
 import os
-import time
 import sys
+import json
 
 # --- Détection du système pour la gestion des touches ---
 if os.name == "nt":  # Windows
@@ -95,3 +95,31 @@ def demander_taille():
 
         except ValueError:
             print("❌ Veuillez entrer un nombre entier valide.\n")
+            
+def save_grid(universe, generation):
+    # Sauvegarde la grille actuelle dans un fichier JSON. #
+    data = {
+        "generation": generation,
+        "width": universe.width,
+        "height": universe.height,
+        "grid": [[cell.alive for cell in row] for row in universe.grid],
+    }
+    with open("save.txt", "w") as f:
+        json.dump(data, f)
+    print("Grille sauvegardée avec succès !")
+
+def charge_last_grid():
+    # Charge la grille depuis un fichier de sauvegarde #
+    try:
+        with open("save.txt", "r") as f:
+            data = json.load(f)
+
+        u = Universe(data["width"], data["height"])
+        for x in range(u.height):
+            for y in range(u.width):
+                u.grid[x][y].alive = data["grid"][x][y]
+        print("Sauvegarde chargée avec succès !\n")
+        return u, data["generation"]
+    except FileNotFoundError:
+        print("Aucune sauvegarde trouvée.\n")
+        return None, 0            
