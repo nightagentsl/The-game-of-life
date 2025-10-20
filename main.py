@@ -5,7 +5,7 @@ import os
 
 if __name__ == "__main__":
     while True:
-        print("=== 🌌 Jeu de la Vie ===")
+        print(" Jeu de la Vie de Conway le goat ")
         choix = input("Souhaitez-vous charger la dernière sauvegarde ? (o/n) : ").lower()
 
         if choix == "o":
@@ -45,6 +45,7 @@ if __name__ == "__main__":
                             break  # nouvelle partie
                         elif key == "q":
                             print("Fin du programme, à bientôt jeune padawan.")
+                            save_grid(universe, generation)
                             sys.exit()
                         time.sleep(0.1)
 
