@@ -3,7 +3,7 @@ import os
 import time
 import sys
 
-# --- Détection du système pour la gestion du clavier ---
+# --- Détection du système pour la gestion des touches ---
 if os.name == "nt":  # Windows
     import msvcrt
 
@@ -12,7 +12,7 @@ if os.name == "nt":  # Windows
             return msvcrt.getch().decode("utf-8").lower()
         return None
 
-else:  # Linux / macOS
+else:  # Linux
     import termios, tty, select
 
     def get_key():
@@ -22,7 +22,6 @@ else:  # Linux / macOS
         return None
 
 
-# --- Classe Cell ---
 class Cell:
     def __init__(self, alive=False):
         self.alive = alive
@@ -31,7 +30,6 @@ class Cell:
         return "◘" if self.alive else "♦"
 
 
-# --- Classe Universe ---
 class Universe:
     def __init__(self, width, height):
         self.width = width
@@ -69,6 +67,7 @@ class Universe:
                     count += 1
         return count
 
+    # Règle du jeu de la vie pour la génération suivante #
     def next_generation(self):
         new_grid = [[Cell() for _ in range(self.width)] for _ in range(self.height)]
         for x in range(self.height):
