@@ -51,7 +51,7 @@ class Universe:
             print(" ".join(str(cell) for cell in row))
         print()
         if pause:
-            print("⏸ Jeu en pause — [ESPACE] reprendre, [n] nouvelle grille, [q] quitter.")
+            print()
         else:
             print("(Appuyez sur [Entrée] pour mettre en pause)")
 
@@ -86,8 +86,13 @@ class Universe:
 def demander_taille():
     while True:
         try:
-            width = int(input("Entrez la largeur de la grille : "))
-            height = int(input("Entrez la hauteur de la grille : "))
-            return width, height
+            width = int(input("Entrez la largeur de la grille (max 70) : "))
+            height = int(input("Entrez la hauteur de la grille (max 70) : "))
+            
+            if 1 <= width <= 70 and 1 <= height <= 70:
+                return width, height
+            else:
+                print("⚠️  Les dimensions doivent être comprises entre 1 et 100.\n")
+
         except ValueError:
-            print("⚠️ Veuillez entrer des nombres entiers valides.\n")
+            print("❌ Veuillez entrer un nombre entier valide.\n")
