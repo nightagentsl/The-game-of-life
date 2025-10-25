@@ -56,7 +56,7 @@ The-game-of-life/
 ### 🚀 Quick Start
 ```bash
 # Lauch
-python main.py
+python3 main.py
 
 ```
 
