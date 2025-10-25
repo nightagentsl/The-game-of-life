@@ -45,23 +45,18 @@ Cell neighborhood:
 ```
 The-game-of-life/
 ├── README.md
+├──main.py
 └── grid_generation/
-    ├── grid_generation.py    # Core grid functions
-    ├── simple_grid.py        # Basic implementation
-    ├── conway_interface.py   # Complete interface
-    └── test_grid.py         # Automated tests
+    └──_pycache_
+    ├──_init_.py
+    ├──core.py
 ```
 
 ### 🚀 Quick Start
 ```bash
-# Simple version
-python grid_generation/simple_grid.py
+# Lauch
+python main.py
 
-# Complete interface
-python grid_generation/conway_interface.py
-
-# Run tests
-python grid_generation/test_grid.py
 ```
 
 ### 💻 Data Format
@@ -77,7 +72,7 @@ grid = [
 ## ✨ Features
 
 - **🎲 Customizable grids**: Any size (n×n)
-- **🎨 Clear display**: ● (alive) vs ○ (dead)
+- **🎨 Clear display**: ◘ (alive) vs ♦ (dead)
 - **📊 Real-time stats**: Live cell count
 - **🧪 Automated tests**: Reliability assured
 - **🎮 Interactive interface**: Easy to use
@@ -120,19 +115,3 @@ blinker = [
     [0, 1, 0]
 ]
 ```
-
-## 🛠️ Usage Examples
-
-```python
-from grid_generation.grid_generation import create_grid, display_grid
-
-# Create initial grid
-grid, size = create_grid()
-
-# Display current state
-display_grid(grid)
-```
-
----
-
-**Discover the beauty of emergence and complexity in this timeless mathematical masterpiece! 🧬✨**
