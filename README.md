@@ -50,6 +50,7 @@ The-game-of-life/
     └──_pycache_
     ├──_init_.py
     ├──core.py
+├──save.txt (when the player save a grid)
 ```
 
 ### 🚀 Quick Start
