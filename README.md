@@ -46,7 +46,7 @@ Cell neighborhood:
 The-game-of-life/
 ├── README.md
 ├──main.py
-└── grid_generation/
+└── game/
     └──_pycache_
     ├──_init_.py
     ├──core.py
